@@ -6,7 +6,7 @@ from pydantic import BaseModel
 from ..config.config import settings
 from ..config.database import get_db, User, verify_password
 
-router = APIRouter(prefix="${API_URL}/api/auth", tags=["auth"])
+router = APIRouter(prefix="/api/auth", tags=["auth"])
 
 class LoginRequest(BaseModel):
     email: str
