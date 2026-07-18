@@ -3,6 +3,7 @@ import json
 import logging
 from fastapi import FastAPI, Request, Response
 from fastapi.middleware.cors import CORSMiddleware
+from .config.config import get_frontend_origins
 from .config.database import init_db
 from .routes import auth, chat
 
@@ -19,7 +20,7 @@ app = FastAPI(
 # CORS configuration
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"], # In production, restrict this to specific origins (e.g., frontend host)
+    allow_origins=get_frontend_origins(),
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

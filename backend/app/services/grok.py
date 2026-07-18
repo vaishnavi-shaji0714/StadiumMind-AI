@@ -11,7 +11,7 @@ logger = logging.getLogger("GrokService")
 
 class GrokService:
     def __init__(self):
-        self.api_key = settings.GROK_API_KEY
+        self.api_key = settings.GROQ_API_KEY
         # Groq's OpenAI-compatible endpoint
         self.api_url = "https://api.groq.com/openai/v1/chat/completions"
         # Best available Groq model for chat (fast + smart)
@@ -22,10 +22,10 @@ class GrokService:
     async def generate_stream(self, messages: List[Dict[str, str]]) -> AsyncGenerator[str, None]:
         """
         Sends chat history to Groq and yields response chunks.
-        Falls back to local mock response if GROK_API_KEY is not defined.
+        Falls back to local mock response if GROQ_API_KEY is not defined or unavailable.
         """
         if not self.api_key or self.api_key.strip() == "":
-            logger.warning("GROK_API_KEY not set. Falling back to simulated response stream.")
+            logger.warning("GROQ_API_KEY not set. Falling back to simulated response stream.")
             async for chunk in self._generate_simulated_stream(messages):
                 yield chunk
             return
@@ -54,17 +54,17 @@ class GrokService:
                         if response.status_code == 401:
                             body = await response.aread()
                             logger.error(f"Groq Auth Error (401): {body.decode()}")
-                            yield "⚠️ Invalid Groq API Key. Please check your GROK_API_KEY in the .env file."
+                            yield "Invalid Groq API key. Please check GROQ_API_KEY in the .env file."
                             return
                         elif response.status_code == 429:
                             body = await response.aread()
                             logger.error(f"Groq Rate Limit (429): {body.decode()}")
-                            yield "⚠️ Groq rate limit reached. Please wait a moment and try again."
+                            yield "Groq rate limit reached. Please wait a moment and try again."
                             return
                         elif response.status_code == 400:
                             body = await response.aread()
                             logger.error(f"Groq Bad Request (400): {body.decode()}")
-                            yield f"⚠️ Bad request to Groq API: {body.decode()}"
+                            yield f"Bad request to Groq API: {body.decode()}"
                             return
                         elif response.status_code >= 500:
                             body = await response.aread()
@@ -98,7 +98,9 @@ class GrokService:
                 retries += 1
                 if retries > self.max_retries:
                     logger.error(f"Groq API call failed after {self.max_retries} retries: {e}")
-                    yield f"\n\n⚠️ Connection Error: {str(e)}. Please try again later."
+                    logger.warning("Falling back to simulated response stream after Groq connection failure.")
+                    async for chunk in self._generate_simulated_stream(messages):
+                        yield chunk
                     break
                 logger.warning(f"Groq API retry {retries}/{self.max_retries} after error: {e}. Backing off {backoff}s...")
                 await asyncio.sleep(backoff)
@@ -120,7 +122,7 @@ class GrokService:
             )
         elif "evacuation" in last_user_message or "emergency" in last_user_message:
             text = (
-                "🚨 EMERGENCY PROTOCOL ACTIVE: Evacuation pathways are fully operational. "
+                "Emergency protocol status: Evacuation pathways are fully operational. "
                 "Main egress gates 1, 3, 7, and 9 are cleared with zero obstructions. "
                 "In the event of an escalation, AI Transport integration will prioritize Metro Lines 1 and 3 "
                 "and deploy all stand-by shuttle buses to parking zone P4 immediately. "

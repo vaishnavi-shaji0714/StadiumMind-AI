@@ -63,8 +63,8 @@ def login(payload: LoginRequest, response: Response, db: Session = Depends(get_d
         httponly=True,
         max_age=3600 * 24 * 7, # 7 days
         expires=3600 * 24 * 7,
-        samesite="lax",
-        secure=False # Set to False for local dev (http://localhost) so cookie works without HTTPS
+        samesite=settings.COOKIE_SAMESITE,
+        secure=settings.COOKIE_SECURE,
     )
     
     return {
@@ -79,8 +79,9 @@ def login(payload: LoginRequest, response: Response, db: Session = Depends(get_d
 def logout(response: Response):
     response.delete_cookie(
         key="session_token",
-        samesite="lax",
-        httponly=True
+        samesite=settings.COOKIE_SAMESITE,
+        httponly=True,
+        secure=settings.COOKIE_SECURE,
     )
     return {"status": "success", "message": "Logged out successfully"}
 

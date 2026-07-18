@@ -250,7 +250,7 @@ async def chat_endpoint(payload: ChatRequest, db: Session = Depends(get_db)):
                         
             except Exception as stream_err:
                 logger.error(f"Error during streaming generation: {stream_err}")
-                yield f"\n\n⚠️ Streaming Error: {str(stream_err)}"
+                yield f"\n\nStreaming error: {str(stream_err)}"
 
         return StreamingResponse(event_generator(), media_type="text/plain")
 
