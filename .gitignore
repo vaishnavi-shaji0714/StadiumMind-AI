@@ -1,0 +1,67 @@
+# ── Node / Frontend ────────────────────────────────────────────
+node_modules/
+dist/
+dist-ssr/
+.pnpm-store/
+*.local
+
+# ── Environment Variables (NEVER commit secrets) ────────────────
+.env
+.env.*
+!.env.example
+
+# ── Python / Backend ────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pyc
+.Python
+*.egg
+*.egg-info/
+dist/
+build/
+eggs/
+parts/
+var/
+sdist/
+develop-eggs/
+.installed.cfg
+lib/
+lib64/
+.venv/
+venv/
+ENV/
+
+# ── Database (SQLite — runtime generated) ───────────────────────
+*.db
+*.sqlite
+*.sqlite3
+
+# ── Figma Make internal files ───────────────────────────────────
+.figma/
+
+# ── OS / Editor ──────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini
+.idea/
+.vscode/
+*.suo
+*.user
+*.swp
+*.swo
+*~
+
+# ── Logs ────────────────────────────────────────────────────────
+*.log
+logs/
+npm-debug.log*
+pnpm-debug.log*
+
+# ── TypeScript build cache ───────────────────────────────────────
+*.tsbuildinfo
+
+# ── Coverage ────────────────────────────────────────────────────
+coverage/
+.nyc_output/
