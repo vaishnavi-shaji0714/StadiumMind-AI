@@ -1,5 +1,6 @@
 import newStadiumImage from '@/imports/Download_Football_stadium_inside_at_night_with_lights_Post-Production_for_free.jpg'
 import { useState, useEffect, useCallback, useRef, type CSSProperties } from 'react'
+const API_URL = import.meta.env.VITE_API_URL;
 
 // ── Types ──────────────────────────────────────────────────────
 type View = 'landing' | 'dashboard' | 'ai' | 'map'
@@ -891,7 +892,7 @@ function AIAssistantView({
     const aiMsgId = Date.now() + 1
 
     try {
-      const response = await fetch('/api/chat', {
+      const response = await fetch('${API_URL}/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -1262,7 +1263,7 @@ function LoginModal({ onClose, onLoginSuccess }: { onClose: () => void; onLoginS
     setErrorMsg('')
     setLoading(true)
     try {
-      const res = await fetch('/api/auth/login', {
+      const res = await fetch('${API_URL}/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
@@ -1398,7 +1399,7 @@ export default function App() {
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const res = await fetch('/api/auth/me')
+        const res = await fetch('${API_URL}/api/auth/me')
         if (res.ok) {
           const data = await res.json()
           setUser(data.user)
@@ -1485,7 +1486,7 @@ export default function App() {
 
   const handleLogout = async () => {
     try {
-      await fetch('/api/auth/logout', { method: 'POST' })
+      await fetch('${API_URL}/api/auth/logout', { method: 'POST' })
     } catch (e) {
       console.error("Logout failed", e)
     }
