@@ -1,6 +1,6 @@
 import newStadiumImage from '@/imports/Download_Football_stadium_inside_at_night_with_lights_Post-Production_for_free.jpg'
 import { useState, useEffect, useCallback, useRef, type CSSProperties } from 'react'
-const API_URL = import.meta.env.VITE_API_URL ?? '';
+const API_URL = (import.meta.env.VITE_API_URL ?? '').replace(/\/+$/, '');
 
 // ── Types ──────────────────────────────────────────────────────
 type View = 'landing' | 'dashboard' | 'ai' | 'map'

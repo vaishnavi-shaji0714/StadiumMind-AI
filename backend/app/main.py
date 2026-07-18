@@ -26,6 +26,12 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+@app.middleware("http")
+async def normalize_api_path_middleware(request: Request, call_next):
+    if request.url.path.startswith("//api/"):
+        request.scope["path"] = request.url.path[1:]
+    return await call_next(request)
+
 # 1. Custom rate limiting middleware (in-memory)
 RATE_LIMIT_WINDOW = 60 # seconds
 RATE_LIMIT_MAX = 100   # requests per window
