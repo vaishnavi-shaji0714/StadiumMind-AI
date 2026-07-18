@@ -7,7 +7,11 @@ class Settings(BaseSettings):
     JWT_SECRET: str = "super-secret-jwt-key-stadiummind"
     DATABASE_URL: str = "sqlite:///./stadiummind.db"
     API_BASE_URL: str = "http://localhost:8000"
-    FRONTEND_ORIGINS: str = "http://localhost:8443,http://127.0.0.1:8443"
+    FRONTEND_ORIGINS: str = (
+        "http://localhost:8443,"
+        "http://127.0.0.1:8443,"
+        "https://stadium-mind-ai.vaishnavishaji14.workers.dev"
+    )
     COOKIE_SECURE: bool = False
     COOKIE_SAMESITE: str = "lax"
     
